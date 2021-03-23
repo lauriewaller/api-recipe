@@ -2,27 +2,19 @@ import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './css/styles.css';
 import $ from 'jquery';
-import ApodImage from './js/apod-service.js';
-import MarsImage from './js/mars-service.js';
+import RecipeOne from './js/recipe-one-service.js';
+import RecipeTwo from './js/recipe-two-service.js';
 
-// function getElements(response) {
-//   if (response.photos[0].img_src) {
-//     $('.showImage').html(`<img src="${response.photos[0].img_src}">`);
-//   } else {
-//     $('.showErrors').text(`There was an error: ${response.message}`);
-//   }
-// }
-
-function displayApodImage(response) {
-  let url = response.hdurl;
+function displayRecipeOne(response) {
+  let url = response.hits[0].recipe.ingredientLines;
   console.log(url);
-  $('.apodImage').html(`<img src="${url}">`);
+  $('.ingredient1').text(`${url}`);
 }
 
-function displayMarsImage(response) {
-  let url = response.photos[0].img_src;
+function displayRecipeTwo(response) {
+  let url = response.hits[1].recipe.ingredientLines;
   console.log(url);
-  $('.marsImage').html(`<img src="${url}">`);
+  $('.ingredient2').text(`${url}`);
 }
 
 function displayErrors(error) {
@@ -30,23 +22,25 @@ function displayErrors(error) {
 }
 
 
-$("#mars-button").click(function(event) {
+$("#recipe-button").click(function(event) {
   event.preventDefault();
-  ApodImage.getApodImage()
-    .then(function(apodResponse) {
-      if (apodResponse instanceof Error) {
-        throw Error(`Nasa Apod API error: ${apodResponse.message}`);
+  RecipeOne.getRecipeOne()
+    .then(function(recipeOneResponse) {
+      if (recipeOneResponse instanceof Error) {
+        throw Error(`Nasa Apod API error: ${recipeOneResponse.message}`);
       }
-      displayApodImage(apodResponse);
-      return MarsImage.getMarsImage();
+      displayRecipeOne(recipeOneResponse);
+      return RecipeTwo.getRecipeTwo();
     })
-    .then(function(marsResponse) {
-      if (marsResponse instanceof Error) {
-        throw Error(`Nasa Mars API error: ${marsResponse.message}`);
+    .then(function(recipeTwoResponse) {
+      if (recipeTwoResponse instanceof Error) {
+        throw Error(`Nasa Mars API error: ${recipeTwoResponse.message}`);
       }
-      displayMarsImage(marsResponse);
+      displayRecipeTwo(recipeTwoResponse);
     })
     .catch(function(error) {
       displayErrors(error.message);
     })
 });
+
+
