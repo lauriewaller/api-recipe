@@ -24,17 +24,19 @@ function displayErrors(error) {
 
 $("#recipe-button").click(function(event) {
   event.preventDefault();
-  RecipeOne.getRecipeOne()
+  let ingredient1 = $('#ingredient1').val();
+  let ingredient2 = $('#ingredient2').val();
+  RecipeOne.getRecipeOne(ingredient1)
     .then(function(recipeOneResponse) {
       if (recipeOneResponse instanceof Error) {
-        throw Error(`Nasa Apod API error: ${recipeOneResponse.message}`);
+        throw Error(`Recipe One API error: ${recipeOneResponse.message}`);
       }
       displayRecipeOne(recipeOneResponse);
-      return RecipeTwo.getRecipeTwo();
+      return RecipeTwo.getRecipeTwo(ingredient2);
     })
     .then(function(recipeTwoResponse) {
       if (recipeTwoResponse instanceof Error) {
-        throw Error(`Nasa Mars API error: ${recipeTwoResponse.message}`);
+        throw Error(`Recipe Two API error: ${recipeTwoResponse.message}`);
       }
       displayRecipeTwo(recipeTwoResponse);
     })
